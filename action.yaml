@@ -58,7 +58,11 @@ runs:
         cat(sprintf("echo $R_LIBS_USER\n"), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
         cat(sprintf("echo $R_LIBS_SITE\n"), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
         cat(sprintf("echo $R_LIB_FOR_PAK\n"), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        message("R_LIBS_USER is ", Sys.getenv("R_LIBS_USER"))
+        message("R_LIBS_SITE is ", Sys.getenv("R_LIBS_SITE"))
+        message("R_LIB_FOR_PAK is ", Sys.getenv("R_LIB_FOR_PAK"))
         cat(sprintf("R_LIBS_USER=%s\n", lib), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        message("R_LIBS_USER is ", Sys.getenv("R_LIBS_USER"))
         cat("::endgroup::\n")
 
         tdir <- tempfile()
