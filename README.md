@@ -17,3 +17,11 @@ else
     echo $TESTTHAT_OUTPUT
 fi
 ```
+
+## Questions
+### Packaged with r-lib/actions/setup-r and r-lib/actions/setup-r-dependencies in it or not?
+If not packaged in it, the user has to specify atime in their `r-lib/actions/setup-r-dependencies`. If packaged, there will be less flexibility for the user.
+### Using actions/check-out or git2r?
+Both are probably feasible.
+### How to test?
+I find that the plot can be significantly different even on the same commits. I cannot come up with an ideal plan of testing. A potential plan is to delibrately add some codes to slow down the performance, for example sleeping for a while and then compare the changes in performance. But still, it won't be 100% sure that my codes are working.
