@@ -46,8 +46,10 @@ runs:
       run: |
         ## --------------------------------------------------------------------
         echo ::group::Show testthat output
-        ls -R
-        find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        TESTTHAT_OUTPUT=$(find check -name 'testthat.Rout*' -exec cat '{}' \; )
+        if [ -z "$TESTTHAT_OUTPUT" ]; then
+            echo  "No testthat output available."
+        else echo $TESTTHAT_OUTPUT; fi
         echo ::endgroup::
       shell: bash
       working-directory: ${{ inputs.working-directory }}
