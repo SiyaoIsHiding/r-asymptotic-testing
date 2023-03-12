@@ -57,6 +57,9 @@ runs:
         }
         cat("::endgroup::\n")
 
+        cat("echo $R_LIBS_USER")
+        cat(sprintf("R_LIBS_USER=%s\n", lib), file = Sys.getenv("GITHUB_ENV"), append = FALSE)
+
         tdir <- tempfile()
         dir.create(tdir)
         git2r::clone("https://github.com/tdhock/binsegRcpp", tdir)
