@@ -38,6 +38,25 @@ runs:
         if (Sys.getenv("_R_CHECK_FORCE_SUGGESTS_", "") == "") Sys.setenv("_R_CHECK_FORCE_SUGGESTS_" = "false")
         cat("check-dir-path=", file.path(getwd(), (${{ inputs.check-dir }})), "\n", file = Sys.getenv("GITHUB_OUTPUT"), sep = "", append = TRUE)
         check_results <- rcmdcheck::rcmdcheck(args = (${{ inputs.args }}), build_args = (${{ inputs.build_args }}), error_on = (${{ inputs.error-on }}), check_dir = (${{ inputs.check-dir }}))
+      
+        cat("::group::Set site library path\n")
+        if (Sys.getenv("RENV_PROJECT") != "") {
+          message("renv project detected, no need to set R_LIBS_SITE")
+          cat(sprintf("R_LIB_FOR_PAK=%s\n", .libPaths()[1]), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+          q("no")
+        }
+        lib <- Sys.getenv("R_LIBS_SITE")
+        if (lib == "") {
+          lib <- file.path(dirname(.Library), "site-library")
+          cat(sprintf("R_LIBS_SITE=%s\n", lib), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+          cat(sprintf("R_LIB_FOR_PAK=%s\n", lib), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+          message("Setting R_LIBS_SITE to ", lib)
+        } else {
+          message("R_LIBS_SITE is already set to ", lib)
+          cat(sprintf("R_LIB_FOR_PAK=%s\n", strsplit(lib, .Platform$path.sep)[[1]][[1]]), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        }
+        cat("::endgroup::\n")
+
         tdir <- tempfile()
         dir.create(tdir)
         git2r::clone("https://github.com/tdhock/binsegRcpp", tdir)
