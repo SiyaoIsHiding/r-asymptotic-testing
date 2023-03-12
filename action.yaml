@@ -61,7 +61,7 @@ runs:
         message("R_LIBS_USER is ", Sys.getenv("R_LIBS_USER"))
         message("R_LIBS_SITE is ", Sys.getenv("R_LIBS_SITE"))
         message("R_LIB_FOR_PAK is ", Sys.getenv("R_LIB_FOR_PAK"))
-        cat(sprintf("R_LIBS_USER=%s\n", lib), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        Sys.setenv(R_LIBS_USER = lib)
         message("R_LIBS_USER is ", Sys.getenv("R_LIBS_USER"))
         cat("::endgroup::\n")
 
