@@ -18,6 +18,9 @@ else
 fi
 ```
 
+## Foreseable Challenges
+To install packages, it probably needs to set some environment variables to let R find the packages installed.
+
 ## Questions
 ### Packaged with r-lib/actions/setup-r and r-lib/actions/setup-r-dependencies in it or not?
 If not packaged in it, the user has to specify atime in their `r-lib/actions/setup-r-dependencies`. If packaged, there will be less flexibility for the user.
