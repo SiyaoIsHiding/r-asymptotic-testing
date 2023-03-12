@@ -46,6 +46,7 @@ runs:
       run: |
         ## --------------------------------------------------------------------
         echo ::group::Show testthat output
+        ls -R
         find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         echo ::endgroup::
       shell: bash
