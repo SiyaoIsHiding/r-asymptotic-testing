@@ -8,11 +8,11 @@ The testing repo using this Github Action is [here](https://github.com/SiyaoIsHi
   + [Current Progress](#current-progress)
   + [To-Do List](#to-do-list)
 + [Questions To Ask](#questions-to-ask)
-  + [**Where should I install the binsegRcpp?**](#where-should-i-install-the-binsegrcpp)
-  + [**Packaged with r-lib/actions/setup-r and r-lib/actions/setup-r-dependencies in it or not?**](#packaged-with-r-libactionssetup-r-and-r-libactionssetup-r-dependencies-in-it-or-not)
-  + [**Using actions/check-out or git2r?**](#using-actionscheck-out-or-git2r)
-  + [**How to test?**](#how-to-test)
-  + [**I failed to find `atime_pkg()`... Where can I find it?**](#i-failed-to-find-atime_pkg-where-can-i-find-it)
+  + [1. Where should I install the binsegRcpp?](#1-where-should-i-install-the-binsegrcpp)
+  + [2. Packaged with `r-lib/actions/setup-r` and `r-lib/actions/setup-r-dependencies` in it or not?](#2-packaged-with-r-libactionssetup-r-and-r-libactionssetup-r-dependencies-in-it-or-not)
+  + [3. Using `actions/check-out` or `git2r`?](#3-using-actionscheck-out-or-git2r)
+  + [4. How to test?](#4-how-to-test)
+  + [5. Sorry that I failed to find `atime_pkg()`...](#5-sorry-that-i-failed-to-find-atime_pkg)
 
 ## Milestones
 ### Easy & Medium Task
@@ -88,20 +88,23 @@ The hardcoded script looks like this:
 
 ## Questions To Ask
 
-### **Where should I install the binsegRcpp?**
-When I am testing locally, I find that I have to install `binsegRcpp` beforehand by `install.packages("binsegRcpp")`, otherwise the script cannot compile, raising `Error in loadNamespace(x) : there is no package called ‘binsegRcpp’`. Therefore, in the hardcoded Github Action above, I have to install `binsegRcpp` during the `setup-r-dependencies` beforehand as well. But is it supposed to use `atime` like this?
+### 1. Where should I install the binsegRcpp?
 
+During my local testing, I found that I had to install `binsegRcpp` beforehand by running `install.packages("binsegRcpp")`, otherwise the script cannot compile, raising `Error in loadNamespace(x) : there is no package called ‘binsegRcpp’`. Therefore, in my current hardcoded Github Action, I have to install `binsegRcpp` during the `setup-r-dependencies` beforehand as well. However, I am not sure if this is the proper approach. May you provide some guidance on this?
 
-### **Packaged with r-lib/actions/setup-r and r-lib/actions/setup-r-dependencies in it or not?**
-If not packaged in it, the user has to specify atime in their `r-lib/actions/setup-r-dependencies`. If packaged, there will be less flexibility for the user.
+### 2. Packaged with `r-lib/actions/setup-r` and `r-lib/actions/setup-r-dependencies` in it or not?
 
+If the setup actions are not packaged in it, the user has to specify `atime` in their `r-lib/actions/setup-r-dependencies`. If packaged, there will be less flexibility for the user. Which one you think may be better?
 
-### **Using actions/check-out or git2r?**
-Both are probably feasible. Using `actions/check-out` will enable the private repositories to use the Github Action, but result in more configuration tasks.
+### 3. Using `actions/check-out` or `git2r`?
 
+Both of them seam feasible. Using `actions/check-out` will enable private repositories to use the Github Action but will require more configuration tasks. Which one do you suggest we use?
 
-### **How to test?**
-I find that the plots can be significantly different even on the same commits. I cannot come up with an ideal plan of testing. A potential plan is to delibrately add some codes to slow down the performance, for example sleeping for a while and then compare the changes in performance. But still, it won't be 100% sure that my codes are working.
+### 4. How to test?
 
-### **I failed to find `atime_pkg()`... Where can I find it?**
+I have noticed that the plots can be significantly different even on the same commits. Therefore, I am unsure about how to test my code thoroughly. One approach I am considering is to intentionally slow down the performance by adding code to sleep for a while and then comparing the changes in performance. However, this is not foolproof. Could you provide some suggestions on the testing oracle?
+
+### 5. Sorry that I failed to find `atime_pkg()`...
+
+May I ask where I can find it?
 
