@@ -43,7 +43,7 @@ runs:
             closing_prices <- quantmod::Cl(AAPL)
           },
           expr=mean(closing_prices),
-          "latest"="50e1e85cfe341c074a7e38005e3373f97691cce2",
+          "latest"=Sys.getenv("GITHUB_SHA"),
           "previous"="3181693822101e1e60c3e6fcb27fd9459424a634")
         refs.best <- atime::references_best(atime.list)
         plot(refs.best)
