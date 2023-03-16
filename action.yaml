@@ -36,21 +36,19 @@ runs:
       
         tdir <- tempfile()
         dir.create(tdir)
-        git2r::clone("https://github.com/tdhock/binsegRcpp", tdir)
+        git2r::clone("https://github.com/joshuaulrich/quantmod", tdir)
         atime.list <- atime::atime_versions(
           pkg.path=tdir,
           N=2^seq(2, 20),
           setup={
-            max.segs <- as.integer(N/2)
-            data.vec <- 1:N
+            closing_prices <- Cl(AAPL)
           },
-          expr=binsegRcpp::binseg_normal(data.vec, max.segs),
-          cv="908b77c411bc7f4fcbcf53759245e738ae724c3e",
-          "another name"="dcd0808f52b0b9858352106cc7852e36d7f5b15d",
-          "another"="5942af606641428315b0e63c7da331c4cd44c091")
+          expr=mean(closing_prices),
+          "latest"="50e1e85cfe341c074a7e38005e3373f97691cce2",
+          "previous"="3181693822101e1e60c3e6fcb27fd9459424a634")
         refs.best <- atime::references_best(atime.list)
         plot(refs.best)
-        atime::atime_versions_remove("binsegRcpp")
+        atime::atime_versions_remove("quantmod")
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
