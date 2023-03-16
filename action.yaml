@@ -34,9 +34,7 @@ runs:
       run: |
         ## --------------------------------------------------------------------
       
-        tdir <- tempfile()
-        dir.create(tdir)
-        git2r::clone("https://github.com/joshuaulrich/quantmod", tdir)
+        tdir <- Sys.getenv("GITHUB_WORKSPACE")
         atime.list <- atime::atime_versions(
           pkg.path=tdir,
           N=2^seq(2, 20),
