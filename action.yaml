@@ -41,7 +41,7 @@ runs:
           pkg.path=tdir,
           N=2^seq(2, 20),
           setup={
-            closing_prices <- Cl(AAPL)
+            closing_prices <- quantmod::Cl(AAPL)
           },
           expr=mean(closing_prices),
           "latest"="50e1e85cfe341c074a7e38005e3373f97691cce2",
