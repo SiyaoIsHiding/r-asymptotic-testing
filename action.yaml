@@ -41,6 +41,7 @@ runs:
           pkg.path=tdir,
           N=2^seq(2, 20),
           setup={
+            quantmod::getSymbols('AAPL')
             closing_prices <- quantmod::Cl(AAPL)
           },
           expr=mean(closing_prices),
