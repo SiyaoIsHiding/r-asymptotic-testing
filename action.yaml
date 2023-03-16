@@ -27,17 +27,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Check
-      id: rcmdcheck    
+    - name: atime-versions
+      id: atime-verions  
       env:
         _R_CHECK_CRAN_INCOMING_: false
       run: |
         ## --------------------------------------------------------------------
-        options(crayon.enabled = TRUE)
-        cat("LOGNAME=", Sys.info()[["user"]], "\n", sep = "", file = Sys.getenv("GITHUB_ENV"), append = TRUE)
-        if (Sys.getenv("_R_CHECK_FORCE_SUGGESTS_", "") == "") Sys.setenv("_R_CHECK_FORCE_SUGGESTS_" = "false")
-        cat("check-dir-path=", file.path(getwd(), (${{ inputs.check-dir }})), "\n", file = Sys.getenv("GITHUB_OUTPUT"), sep = "", append = TRUE)
-        check_results <- rcmdcheck::rcmdcheck(args = (${{ inputs.args }}), build_args = (${{ inputs.build_args }}), error_on = (${{ inputs.error-on }}), check_dir = (${{ inputs.check-dir }}))
       
         tdir <- tempfile()
         dir.create(tdir)
@@ -60,30 +55,4 @@ runs:
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Show testthat output
-      if: always()
-      run: |
-        ## --------------------------------------------------------------------
-        echo ::group::Show testthat output
-        TESTTHAT_OUTPUT=$(find check -name 'testthat.Rout*' -exec cat '{}' \; )
-        if [ -z "$TESTTHAT_OUTPUT" ]; then
-            echo  "No testthat output available."
-        else echo $TESTTHAT_OUTPUT; fi
-        echo ::endgroup::
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
 
-    - name: Upload check results
-      if: failure() || inputs.upload-results != 'false'
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-        path: ${{ steps.rcmdcheck.outputs.check-dir-path }}
-
-    - name: Upload snapshots
-      if: inputs.upload-snapshots != 'false'
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ runner.os }}-r${{ matrix.config.r }}-testthat-snapshots
-        path: ${{ steps.rcmdcheck.outputs.check-dir-path }}/**/tests*/testthat/_snaps
-        if-no-files-found: ignore
