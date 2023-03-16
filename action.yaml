@@ -6,6 +6,22 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: check-out
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: setup
+      uses: r-lib/actions/setup-r@v2
+      with:
+        use-public-rspm: true
+
+    - name: setup-dependency
+      uses: r-lib/actions/setup-r-dependencies@v2
+      with:
+        extra-packages: any::rcmdcheck, any::atime, any::quantmod
+        needs: check
+
     - name: atime-versions
       id: atime-verions  
       env:
@@ -13,9 +29,9 @@ runs:
       run: |
         ## --------------------------------------------------------------------
       
-        tdir <- Sys.getenv("GITHUB_WORKSPACE")
+        src_dir <- Sys.getenv("GITHUB_WORKSPACE")
         atime.list <- atime::atime_versions(
-          pkg.path=tdir,
+          pkg.path=src_dir,
           N=2^seq(2, 20),
           setup={
             quantmod::getSymbols('AAPL')
