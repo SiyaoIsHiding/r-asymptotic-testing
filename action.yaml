@@ -28,20 +28,21 @@ runs:
       run: |
         ## --------------------------------------------------------------------
         devtools::install_github("tdhock/atime@compare-dt-tidy")
+
+        knitr::opts_chunk$set(
+          collapse = TRUE,
+          comment = "#>"
+        )
+
         src_dir <- Sys.getenv("GITHUB_WORKSPACE")
-        atime.list <- atime::atime_versions(
-          pkg.path=src_dir,
-          N=2^seq(2, 20),
-          setup={
-            quantmod::getSymbols('AAPL')
-            closing_prices <- quantmod::Cl(AAPL)
-          },
-          expr=mean(closing_prices),
-          "latest"=Sys.getenv("GITHUB_SHA"),
-          "previous"="3181693822101e1e60c3e6fcb27fd9459424a634")
-        refs.best <- atime::references_best(atime.list)
-        plot(refs.best)
-        atime::atime_versions_remove("quantmod")
+        inst.atime <- file.path(src_dir, "inst", "atime")
+        test.lines <- readLines(file.path(inst.atime, "tests.R"))
+        cat(test.lines, sep="\n")
+
+        options(repos="http://cloud.r-project.org")
+        result.list <- atime::atime_pkg(src_dir)
+        tests.png <- file.path(inst.atime, "tests_all_facet.png")
+        knitr::include_graphics(tests.png)
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
