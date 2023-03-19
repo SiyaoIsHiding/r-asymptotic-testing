@@ -18,7 +18,7 @@ runs:
     - name: setup-dependency
       uses: r-lib/actions/setup-r-dependencies@v2
       with:
-        extra-packages: any::rcmdcheck, any::atime
+        extra-packages: any::rcmdcheck, any::devtools, any::ggplot2, any::directlabels
         needs: check
 
     - name: atime-versions
@@ -27,7 +27,7 @@ runs:
         _R_CHECK_CRAN_INCOMING_: false
       run: |
         ## --------------------------------------------------------------------
-      
+        devtools::install_github("tdhock/atime@compare-dt-tidy")
         src_dir <- Sys.getenv("GITHUB_WORKSPACE")
         atime.list <- atime::atime_versions(
           pkg.path=src_dir,
