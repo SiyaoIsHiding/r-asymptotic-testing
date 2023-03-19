@@ -51,7 +51,7 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: atime-results
-        path: inst/anime/
+        path: inst/atime/
 
 
 
