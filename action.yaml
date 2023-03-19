@@ -29,20 +29,28 @@ runs:
         ## --------------------------------------------------------------------
         devtools::install_github("tdhock/atime@compare-dt-tidy")
 
-        knitr::opts_chunk$set(
-          collapse = TRUE,
-          comment = "#>"
-        )
-
         src_dir <- Sys.getenv("GITHUB_WORKSPACE")
-        inst.atime <- file.path(src_dir, "inst", "atime")
-        test.lines <- readLines(file.path(inst.atime, "tests.R"))
-        cat(test.lines, sep="\n")
 
         options(repos="http://cloud.r-project.org")
         result.list <- atime::atime_pkg(src_dir)
-        tests.png <- file.path(inst.atime, "tests_all_facet.png")
-        knitr::include_graphics(tests.png)
+        # apply t.test to each of the expression, between HEAD and CRAN
+        detect_perf_change <- function(expr, alpha=1e-3){
+          measure <- expr$measurements
+          head_perf <- measure[startsWith(measure$expr.name, "HEAD"), mean]
+          cran_perf <- measure[startsWith(measure$expr.name, "CRAN"), mean]
+          test_result  <- t.test(head_m1, cran_m1, paired = FALSE)
+          return (test_result$p.value < alpha)
+        }
+
+        sig_changes <- result.list[unlist(lapply(result.list, detect_perf_change, 0.6))]
+        if(length(sig_changes) > 0 ){
+          out_str <- paste("Significant performance changes detected in ", names(sig_changes))
+          Sys.setenv(ATIME_PKG_RESULT=paste(out_str, collapse = "\n"))
+        }else{
+          Sys.unsetenv("ATIME_PKG_RESULT")
+        }
+
+        cat(Sys.getenv("ATIME_PKG_RESULT"))
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
@@ -54,9 +62,10 @@ runs:
         path: inst/atime/
 
     - name: PR comment with file
+      if: env.ATIME_PKG_RESULT
       uses: thollander/actions-comment-pull-request@v2
       with:
-        filePath: inst/atime/tests_all_facet.png
+        message: ${{env.ATIME_PKG_RESULT}}
 
 
 
