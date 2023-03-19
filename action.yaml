@@ -41,8 +41,8 @@ runs:
 
         options(repos="http://cloud.r-project.org")
         result.list <- atime::atime_pkg(src_dir)
-        tests.png <- file.path(inst.atime, "tests_all_facet.png")
-        knitr::include_graphics(tests.png)
+        # tests.png <- file.path(inst.atime, "tests_all_facet.png")
+        # knitr::include_graphics(tests.png)
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
