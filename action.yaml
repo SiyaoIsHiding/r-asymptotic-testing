@@ -38,7 +38,7 @@ runs:
           measure <- expr$measurements
           head_perf <- measure[startsWith(measure$expr.name, "HEAD"), mean]
           cran_perf <- measure[startsWith(measure$expr.name, "CRAN"), mean]
-          test_result  <- t.test(head_m1, cran_m1, paired = FALSE)
+          test_result  <- t.test(head_perf, cran_perf, paired = FALSE)
           return (test_result$p.value < alpha)
         }
 
