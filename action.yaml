@@ -1,5 +1,5 @@
 name: 'r-asymptotic-testing'
-description: 'This GitHub Action will run the tests in `inst/atime/tests.R` by `atime::atime_pkg`, on different versions of the package (HEAD vs base, or HEAD vs CRAN) with various input data sizes, apply t test on the test results, upload plots of the test results, and leave messages in the PR if significant performance regression or improvements are detected.'
+description: 'This GitHub Action will run the tests in `inst/atime/tests.R` and report significant performance regression or improvement if detected.'
 author: 'Jane He'
 inputs:
   alpha:
