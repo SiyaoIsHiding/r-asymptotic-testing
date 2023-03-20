@@ -49,16 +49,18 @@ runs:
         options(repos="http://cloud.r-project.org")
         result.list <- atime::atime_pkg(src_dir)
 
-        vec <- paste0(unlist(result.list), collapse = "\n")
-        cat(vec)
+        cat("result.list names\n")
+        cat(names(result.list), sep = "\n")
+        cat("result.list[[1]]$measurements$expr.name\n")
+        cat(result.list[[1]]$measurements$expr.name, sep ="\n")
 
         # apply t.test to each of the expression
         detect_perf_change <- function(expr, alpha=1e-3){
-          vec <- paste0(unlist(expr), collapse = "\n")
-          cat(vec)
+          cat("expr names\n")
+          cat(names(expr), sep = "\n")
           measure <- expr$measurements
-          vec <- paste0(unlist(measure), collapse = "\n")
-          cat(vec)
+          cat("measure names\n")
+          cat(names(measure), sep = "\n")
           head_perf <- measure[startsWith(measure$expr.name, "HEAD"), mean]
           if (Sys.getenv("GITHUB_BASE_REF") == "") {
             # If this is a commit, HEAD is compared with CRAN
