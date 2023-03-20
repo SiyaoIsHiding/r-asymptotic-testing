@@ -19,7 +19,7 @@ runs:
     # Switch is needed for git2r::revparse_single to function
     # Only needed for pull requests
     - name: git-switch
-      if: env.GITHUB_BASE_REF
+      # if: env.GITHUB_BASE_REF
       run: |
         git switch "${GITHUB_BASE_REF}"
         git switch "${GITHUB_HEAD_REF}"
