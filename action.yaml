@@ -55,7 +55,7 @@ runs:
 
         alpha <- eval(expr = parse(text = Sys.getenv("INPUT_ALPHA")))
         sig_detection <- lapply(result.list, detect_perf_change, alpha)
-        
+        sig_detection <- Filter(Negate(is.null), sig_detection)
         if(length(sig_detection) > 0){
           f <- file.path(src_dir, "inst","atime","test_result.txt")
           write("Significant performance changes detected in the following test(s):", file = f)
