@@ -34,7 +34,6 @@ runs:
       run: |
         ## --------------------------------------------------------------------
         devtools::install_github("tdhock/atime@compare-dt-tidy")
-
         src_dir <- Sys.getenv("GITHUB_WORKSPACE")
 
         options(repos="http://cloud.r-project.org")
