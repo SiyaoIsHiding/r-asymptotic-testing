@@ -17,8 +17,8 @@ runs:
 
     - name: git-switch
       run: |
-        git switch ${{env.GITHUB_BASE_REF}}
-        git switch ${{env.GITHUB_HEAD_REF}}
+        git switch "${GITHUB_BASE_REF}"
+        git switch "${GITHUB_HEAD_REF}"
       shell: bash
 
     - name: setup
