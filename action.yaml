@@ -57,23 +57,25 @@ runs:
         alpha <- eval(expr = parse(text = Sys.getenv("INPUT_ALPHA")))
         sig_detection <- lapply(result.list, detect_perf_change, alpha)
         
-        f <- file.path(src_dir, "inst","atime","test_result.txt")
-        write("Significant performance changes detected in the following tests:", file = f)
-        write.table(as.data.frame(unlist(sig_detection)), file = f, col.names = FALSE, append = TRUE ,quote = FALSE, sep = ": ")
+        if(length(sig_detection) > 0){
+          f <- file.path(src_dir, "inst","atime","test_result.txt")
+          write("Significant performance changes detected in the following test(s):", file = f)
+          write.table(as.data.frame(unlist(sig_detection)), file = f, col.names = FALSE, append = TRUE ,quote = FALSE, sep = ": ")
+          cat(sprintf("ATIME_CHANGES_DETECTED=True\n"), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        }
 
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
 
-    # - name: upload-artifact
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: atime-results
-    #     path: inst/atime/
+    - name: upload-artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: atime-results
+        path: inst/atime/
 
     - name: PR comment with file
-      # if: steps.atime_pkg.outputs.atime-pkg-result
-
+      if: ${{env.ATIME_CHANGES_DETECTED}}
       uses: thollander/actions-comment-pull-request@v2
       with:
         filePath: inst/atime/test_result.txt
