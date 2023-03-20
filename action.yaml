@@ -49,18 +49,9 @@ runs:
         options(repos="http://cloud.r-project.org")
         result.list <- atime::atime_pkg(src_dir)
 
-        cat("result.list names\n")
-        cat(names(result.list), sep = "\n")
-        cat("result.list[[1]]$measurements$expr.name\n")
-        cat(result.list[[1]]$measurements$expr.name, sep ="\n")
-
         # apply t.test to each of the expression
         detect_perf_change <- function(expr, alpha=1e-3){
-          cat("expr names\n")
-          cat(names(expr), sep = "\n")
           measure <- expr$measurements
-          cat("measure names\n")
-          cat(names(measure), sep = "\n")
           head_perf <- measure[startsWith(measure$expr.name, "HEAD"), mean]
           if (Sys.getenv("GITHUB_BASE_REF") == "") {
             # If this is a commit, HEAD is compared with CRAN
@@ -92,21 +83,6 @@ runs:
           write.table(as.data.frame(unlist(sig_detection)), file = f, col.names = FALSE, append = TRUE ,quote = FALSE, sep = ": ")
           cat(sprintf("ATIME_CHANGES_DETECTED=True\n"), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
         }
-
-        cat("base.ref\n")
-        cat(Sys.getenv("GITHUB_BASE_REF"),  "\n")
-
-        cat("head.ref\n")
-        cat(Sys.getenv("GITHUB_HEAD_REF"),  "\n")
-
-        cat("git2r repository head name")
-        repo <- git2r::repository(src_dir)
-        cat(git2r::repository_head(src_dir)$name)
-
-        cat("message of master\n")
-        cat(git2r::revparse_single(src_dir, "master")$message, "\n")
-        cat("message of another-branch\n")
-        cat(git2r::revparse_single(src_dir, "another-branch")$message, "\n")
 
         
       shell: Rscript {0}
