@@ -46,9 +46,7 @@ runs:
         
         out_str <- paste("Significant performance changes detected in ", names(sig_changes))
         out_str <- paste(out_str, collapse = "\n")
-        cat("atime-pkg-result=", "message1", "\n", file = Sys.getenv("GITHUB_OUTPUT"), sep = "", append = TRUE)
-        cat(sprintf("ATIME_PKG_RESULT=%s\n", "message2"), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
-        cat(sprintf(Sys.getenv("GITHUB_ENV")))
+        cat(sprintf("ATIME_PKG_RESULT='%s'\n", out_str), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
         
 
         
