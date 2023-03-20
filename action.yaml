@@ -1,5 +1,5 @@
 name: 'r-asymptotic-testing'
-description: 'This GitHub Action will run the tests in `inst/atime/tests.R` and report significant performance regression or improvement if detected.'
+description: 'Run tests and report significant performance changes if detected'
 author: 'Jane He'
 inputs:
   alpha:
