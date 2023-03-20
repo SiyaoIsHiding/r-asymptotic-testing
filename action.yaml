@@ -30,6 +30,7 @@ runs:
       id: atime-pkg
       env:
         _R_CHECK_CRAN_INCOMING_: false
+        INPUT_ALPHA: ${{ inputs.alpha }}
       run: |
         ## --------------------------------------------------------------------
         devtools::install_github("tdhock/atime@compare-dt-tidy")
