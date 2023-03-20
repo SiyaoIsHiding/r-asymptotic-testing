@@ -51,7 +51,7 @@ runs:
         }
 
         cat(sprintf(Sys.getenv("ATIME_PKG_RESULT")))
-        cat(sprintf("::set-output name=ATIME_PKG_RESULT::%s", out_str))
+        cat(sprintf("::set-output name=ATIME_PKG_RESULT::%s", paste(out_str, collapse = "\n")))
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
