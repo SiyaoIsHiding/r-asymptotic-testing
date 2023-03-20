@@ -42,7 +42,7 @@ runs:
           return (test_result$p.value < alpha)
         }
 
-        sig_changes <- result.list[unlist(lapply(result.list, detect_perf_change, 0.6))]
+        sig_changes <- result.list[unlist(lapply(result.list, detect_perf_change, 1))]
         
         out_str <- paste("Significant performance changes detected in ", names(sig_changes))
         out_str <- paste(out_str, collapse = "\n")
