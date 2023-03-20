@@ -44,27 +44,27 @@ runs:
 
         sig_changes <- result.list[unlist(lapply(result.list, detect_perf_change, 1))]
         
-        out_str <- paste("Significant performance changes detected in ", names(sig_changes))
-        out_str <- paste(out_str, collapse = "\n")
-        cat(sprintf("ATIME_PKG_RESULT='%s'\n", out_str), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
+        f <- file.path(src_dir, "inst","atime","test_result.txt")
+        write.table(names(sig_changes), file = f)
+
         
 
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
 
-    - name: upload-artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: atime-results
-        path: inst/atime/
+    # - name: upload-artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: atime-results
+    #     path: inst/atime/
 
     - name: PR comment with file
       # if: steps.atime_pkg.outputs.atime-pkg-result
 
       uses: thollander/actions-comment-pull-request@v2
       with:
-        message: ${{env.ATIME_PKG_RESULT}}
+        file: inst/atime/test_result.txt
 
 
 
