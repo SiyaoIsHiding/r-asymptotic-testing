@@ -15,10 +15,10 @@ runs:
       with:
         fetch-depth: 0
 
-    - run: git show HEAD | head 
-      shell: bash
-    
-    - run: git version
+    - name: git-switch
+      run: |
+        git switch ${{env.GITHUB_BASE_REF}}
+        git switch ${{env.GITHUB_HEAD_REF}}
       shell: bash
 
     - name: setup
