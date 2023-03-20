@@ -64,7 +64,7 @@ runs:
 
       uses: thollander/actions-comment-pull-request@v2
       with:
-        file: inst/atime/test_result.txt
+        filePath: inst/atime/test_result.txt
 
 
 
