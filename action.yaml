@@ -16,6 +16,8 @@ runs:
         fetch-depth: 0
 
     - run: git show HEAD | head 
+    
+    - run: git version
 
     - name: setup
       uses: r-lib/actions/setup-r@v2
