@@ -1,4 +1,4 @@
-name: 'atime-versions'
+name: 'r-asymptotic-testing'
 description: 'Use atime_versions() to compare performance between versions'
 author: 'Jane He'
 inputs:
