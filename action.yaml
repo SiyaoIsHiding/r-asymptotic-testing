@@ -94,7 +94,7 @@ runs:
         path: inst/atime/
 
     - name: PR comment with file
-      if: env.ATIME_CHANGES_DETECTED
+      if: env.ATIME_CHANGES_DETECTED && github.event_name == 'pull_request'
       uses: thollander/actions-comment-pull-request@v2
       with:
         filePath: inst/atime/test_result.txt
