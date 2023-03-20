@@ -46,12 +46,12 @@ runs:
         if(length(sig_changes) > 0 ){
           out_str <- paste("Significant performance changes detected in ", names(sig_changes))
           Sys.setenv(ATIME_PKG_RESULT=paste(out_str, collapse = "\n"))
+          cat(sprintf(Sys.getenv("ATIME_PKG_RESULT")))
+          cat(sprintf("::set-output name=ATIME_PKG_RESULT::%s", paste(out_str, collapse = "\n")))
         }else{
           Sys.unsetenv("ATIME_PKG_RESULT")
         }
 
-        cat(sprintf(Sys.getenv("ATIME_PKG_RESULT")))
-        cat(sprintf("::set-output name=ATIME_PKG_RESULT::%s", paste(out_str, collapse = "\n")))
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
