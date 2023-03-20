@@ -9,6 +9,9 @@ inputs:
   
 runs:
   using: "composite"
+  env:
+    GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    R_KEEP_PKG_SOURCE: yes
   steps:
     - name: check-out
       uses: actions/checkout@v1
