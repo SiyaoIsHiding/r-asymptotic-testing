@@ -15,7 +15,11 @@ runs:
       with:
         fetch-depth: 0
 
+    # The checkout action only fetch the repo, without creating local branches. 
+    # Switch is needed for git2r::revparse_single to function
+    # Only needed for pull requests
     - name: git-switch
+      if: env.GITHUB_BASE_REF
       run: |
         git switch "${GITHUB_BASE_REF}"
         git switch "${GITHUB_HEAD_REF}"
@@ -31,12 +35,6 @@ runs:
       with:
         extra-packages: any::rcmdcheck, any::devtools, any::ggplot2, any::directlabels
         needs: check
-
-    # - name: Dump GitHub context
-    #   env:
-    #     GITHUB_CONTEXT: ${{ toJson(github) }}
-    #   run: echo "$GITHUB_CONTEXT"
-    #   shell: bash
       
     - name: atime pkg
       id: atime-pkg
@@ -51,12 +49,23 @@ runs:
         options(repos="http://cloud.r-project.org")
         result.list <- atime::atime_pkg(src_dir)
 
-        # apply t.test to each of the expression, between HEAD and CRAN
+        # apply t.test to each of the expression
         detect_perf_change <- function(expr, alpha=1e-3){
           measure <- expr$measurements
           head_perf <- measure[startsWith(measure$expr.name, "HEAD"), mean]
-          cran_perf <- measure[startsWith(measure$expr.name, "CRAN"), mean]
-          test_result  <- t.test(head_perf, cran_perf, paired = FALSE)
+          if (Sys.getenv("GITHUB_BASE_REF") == "") {
+            # If this is a commit, HEAD is compared with CRAN
+            cran_perf <- measure[startsWith(measure$expr.name, "CRAN"), mean]
+            test_result  <- t.test(head_perf, cran_perf, paired = FALSE)
+            cat("HEAD is compared with CRAN")
+          }else{
+            # If this is a pull request, HEAD is compared with base
+            base_perf <- measure[startsWith(measure$expr.name, "base"), mean]
+            test_result  <- t.test(head_perf, base_perf, paired = FALSE)
+            cat("HEAD is compared with base")
+          }
+          
+          
           if (test_result$p.value < alpha & test_result$estimate[[1]] < test_result$estimate[[2]]){
             return('Significant performance improvement')
           }else if (test_result$p.value < alpha & test_result$estimate[[1]] > test_result$estimate[[2]]){
