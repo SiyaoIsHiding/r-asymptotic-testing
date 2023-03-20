@@ -26,6 +26,11 @@ runs:
         extra-packages: any::rcmdcheck, any::devtools, any::ggplot2, any::directlabels
         needs: check
 
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+      
     - name: atime pkg
       id: atime-pkg
       env:
@@ -64,14 +69,13 @@ runs:
         }
 
         cat("base.ref\n")
-        cat(Sys.getenv("GITHUB_BASE_REF", "master"))
+        cat(Sys.getenv("GITHUB_BASE_REF"),  "\n")
         cat("git2r repository head name")
         repo <- git2r::repository(src_dir)
         cat(git2r::repository_head(repo)$name)
 
         
       shell: Rscript {0}
-      working-directory: ${{ inputs.working-directory }}
 
     - name: upload-artifact
       uses: actions/upload-artifact@v3
