@@ -63,6 +63,12 @@ runs:
           cat(sprintf("ATIME_CHANGES_DETECTED=True\n"), file = Sys.getenv("GITHUB_ENV"), append = TRUE)
         }
 
+        cat("base.ref\n")
+        cat(Sys.getenv("GITHUB_BASE_REF", "master"))
+        cat("git2r repository head name")
+        repo <- git2r::repository(src_dir)
+        cat(git2r::repository_head(repo)$name)
+
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
