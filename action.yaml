@@ -33,21 +33,26 @@ runs:
 
         options(repos="http://cloud.r-project.org")
         result.list <- atime::atime_pkg(src_dir)
+
         # apply t.test to each of the expression, between HEAD and CRAN
         detect_perf_change <- function(expr, alpha=1e-3){
           measure <- expr$measurements
           head_perf <- measure[startsWith(measure$expr.name, "HEAD"), mean]
           cran_perf <- measure[startsWith(measure$expr.name, "CRAN"), mean]
           test_result  <- t.test(head_perf, cran_perf, paired = FALSE)
-          return (test_result$p.value < alpha)
+          if (test_result$p.value < alpha & test_result$estimate[[1]] < test_result$estimate[[2]]){
+            return('Significant performance improvement')
+          }else if (test_result$p.value < alpha & test_result$estimate[[1]] > test_result$estimate[[2]]){
+            return('Significant performance regression')
+          }
+          return(NULL)
         }
 
-        sig_changes <- result.list[unlist(lapply(result.list, detect_perf_change, 1))]
+        sig_detection <- lapply(result.list, detect_perf_change, 1)
         
         f <- file.path(src_dir, "inst","atime","test_result.txt")
-        write.table(names(sig_changes), file = f)
-
-        
+        write("Significant performance changes detected in the following tests:", file = f)
+        write.table(as.data.frame(unlist(sig_detection)), file = f, col.names = FALSE, append = TRUE ,quote = FALSE, sep = ": ")
 
         
       shell: Rscript {0}
