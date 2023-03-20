@@ -45,11 +45,8 @@ runs:
         sig_changes <- result.list[unlist(lapply(result.list, detect_perf_change, 0.6))]
         if(length(sig_changes) > 0 ){
           out_str <- paste("Significant performance changes detected in ", names(sig_changes))
-          Sys.setenv(ATIME_PKG_RESULT=paste(out_str, collapse = "\n"))
-          cat(sprintf(Sys.getenv("ATIME_PKG_RESULT")))
-          cat(sprintf("::set-output name=ATIME_PKG_RESULT::%s", paste(out_str, collapse = "\n")))
-        }else{
-          Sys.unsetenv("ATIME_PKG_RESULT")
+          out_str <- paste(out_str, collapse = "\n")
+          cat("atime-pkg-result=", out_str, "\n", file = Sys.getenv("GITHUB_OUTPUT"), sep = "", append = TRUE)
         }
 
         
@@ -63,10 +60,10 @@ runs:
         path: inst/atime/
 
     - name: PR comment with file
-      if: steps.atime_pkg.outputs.ATIME_PKG_RESULT
+      # if: steps.atime_pkg.outputs.atime-pkg-result
       uses: thollander/actions-comment-pull-request@v2
       with:
-        message: ${{steps.atime_pkg.outputs.ATIME_PKG_RESULT}}
+        message: ${{steps.atime_pkg.outputs.atime-pkg-result}}
 
 
 
