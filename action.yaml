@@ -1,7 +1,12 @@
 name: 'atime-versions'
 description: 'Use atime_versions() to compare performance between versions'
 author: 'Jane He'
-
+inputs:
+  alpha:
+    description: 'The significance threshold to report performance changes, used in Welch Two Sample t-test'
+    default: '"1e-3"'
+    required: false
+  
 runs:
   using: "composite"
   steps:
@@ -48,7 +53,8 @@ runs:
           return(NULL)
         }
 
-        sig_detection <- lapply(result.list, detect_perf_change, 1)
+        alpha <- eval(expr = parse(text = Sys.getenv("INPUT_ALPHA")))
+        sig_detection <- lapply(result.list, detect_perf_change, alpha)
         
         f <- file.path(src_dir, "inst","atime","test_result.txt")
         write("Significant performance changes detected in the following tests:", file = f)
