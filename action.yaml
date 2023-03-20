@@ -21,8 +21,8 @@ runs:
         extra-packages: any::rcmdcheck, any::devtools, any::ggplot2, any::directlabels
         needs: check
 
-    - name: atime-versions
-      id: atime-verions  
+    - name: atime pkg
+      id: atime-pkg
       env:
         _R_CHECK_CRAN_INCOMING_: false
       run: |
@@ -50,7 +50,8 @@ runs:
           Sys.unsetenv("ATIME_PKG_RESULT")
         }
 
-        cat(Sys.getenv("ATIME_PKG_RESULT"))
+        cat(sprintf(Sys.getenv("ATIME_PKG_RESULT")))
+        cat(sprintf("::set-output name=ATIME_PKG_RESULT::%s", out_str))
         
       shell: Rscript {0}
       working-directory: ${{ inputs.working-directory }}
@@ -62,10 +63,10 @@ runs:
         path: inst/atime/
 
     - name: PR comment with file
-      if: env.ATIME_PKG_RESULT
+      if: steps.atime_pkg.outputs.ATIME_PKG_RESULT
       uses: thollander/actions-comment-pull-request@v2
       with:
-        message: ${{env.ATIME_PKG_RESULT}}
+        message: ${{steps.atime_pkg.outputs.ATIME_PKG_RESULT}}
 
 
 
