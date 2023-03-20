@@ -26,11 +26,11 @@ runs:
         extra-packages: any::rcmdcheck, any::devtools, any::ggplot2, any::directlabels
         needs: check
 
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
-      run: echo "$GITHUB_CONTEXT"
-      shell: bash
+    # - name: Dump GitHub context
+    #   env:
+    #     GITHUB_CONTEXT: ${{ toJson(github) }}
+    #   run: echo "$GITHUB_CONTEXT"
+    #   shell: bash
       
     - name: atime pkg
       id: atime-pkg
@@ -71,9 +71,18 @@ runs:
 
         cat("base.ref\n")
         cat(Sys.getenv("GITHUB_BASE_REF"),  "\n")
+
+        cat("head.ref\n")
+        cat(Sys.getenv("GITHUB_HEAD_REF"),  "\n")
+
         cat("git2r repository head name")
         repo <- git2r::repository(src_dir)
-        cat(git2r::repository_head(repo)$name)
+        cat(git2r::repository_head(src_dir)$name)
+
+        cat("message of master\n")
+        cat(git2r::revparse_single(src_dir, "master")$message, "\n")
+        cat("message of another-branch\n")
+        cat(git2r::revparse_single(src_dir, "another-branch")$message, "\n")
 
         
       shell: Rscript {0}
