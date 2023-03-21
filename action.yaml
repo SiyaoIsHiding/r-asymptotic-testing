@@ -9,9 +9,6 @@ inputs:
   
 runs:
   using: "composite"
-  env:
-    GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-    R_KEEP_PKG_SOURCE: yes
   steps:
     - name: check-out
       uses: actions/checkout@v1
@@ -48,6 +45,7 @@ runs:
         ## --------------------------------------------------------------------
         devtools::install_github("tdhock/atime@compare-dt-tidy")
         src_dir <- Sys.getenv("GITHUB_WORKSPACE")
+        devtools::install(src_dir)
 
         options(repos="http://cloud.r-project.org")
         result.list <- atime::atime_pkg(src_dir)
