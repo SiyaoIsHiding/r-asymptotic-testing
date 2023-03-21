@@ -5,8 +5,14 @@ This GitHub Action will run the tests in `inst/atime/tests.R` by `atime::atime_p
 
 ## User Guide
 ### Prerequisites
-1. First, you need to write some tests in your `inst/atime/tests.R`, which defines `test.list`, a list with names corresponding to different tests. Each element should be a list with named elements `N` `setup`, `expr`, to be passed as named arguments to `atime::atime_versions`. [This](https://github.com/tdhock/binsegRcpp/blob/5e5e1349304238b6d20b55dff236989caafec239/inst/atime/tests.R) is an example of the `inst/atime/tests.R`.
+1. First, you need to write some tests in your `inst/atime/tests.R`, which defines `test.list`, a list with names corresponding to different tests. Each element should be a list with named elements `N` `setup`, `expr`, to be passed as named arguments to `atime::atime_versions`. [This](https://github.com/tdhock/binsegRcpp/blob/5e5e1349304238b6d20b55dff236989caafec239/inst/atime/tests.R) is an example of the `inst/atime/tests.R`. You can find more documentation about the `atime` package [here](https://github.com/tdhock/atime/blob/compare-dt-tidy/man/atime_pkg.Rd).
 2. If you want the GitHub Action to be used to leave messages in pull requests, you need to toggle on the Workflow write permission. In your GitHub repository, go to settings > Actions > Workflow permissions > choose "Read and write permissions".
+3. When you define the workflow, please pass the environment variables as follows
+  ```yml
+  env:
+    GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    R_KEEP_PKG_SOURCE: yes
+  ```
 
 ### Inputs
 There is one input `alpha` that you can specify. This is the significance threshold to report performance changes, used in Welch Two Sample t-test to compare with its p value. It should be an R expression, so it may need to be quoted by a double quote and then a single quote. It should be a value between 0 and 1. The higher it is, the easier it will report significant changes. The default value is 1e-3.
