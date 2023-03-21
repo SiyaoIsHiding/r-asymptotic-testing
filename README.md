@@ -27,7 +27,7 @@ There will always be a zip file as an uploaded artifact at the bottom of the Act
 
   Here is an example of the plot of all test results, `tests_all_facet.png`.
   ![tests_all_facet.png](images/tests_all_facet_pr.png)
-  * And if there are **siginificant performance** changes detected**:
+  * And if there are **siginificant performance** changes detected:
     You can find a `test_result.txt` file in the uploaded artifact. The content looks like this:
     ```txt
     Significant performance changes detected in the following test(s):
